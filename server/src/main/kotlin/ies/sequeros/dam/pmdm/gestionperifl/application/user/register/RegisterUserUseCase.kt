@@ -22,13 +22,9 @@ class RegisterUserUseCase(
             //se crea el objeto del dominio a partir de comando
             val item = command.toDomain(UUID.randomUUID())
             val password = passwordEnconder.encode(command.password)
-
                 //se almacena en la base de datos
                 val newUser = repository.create(item, password = password)
                 //se devuelve el dto
                 UserDto.fromDomain(newUser)
-
-
-
         }
 }

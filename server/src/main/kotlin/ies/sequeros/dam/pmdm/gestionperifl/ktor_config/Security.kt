@@ -27,7 +27,7 @@ fun Application.configureSecurity() {
             validate { credential ->
                 //tiene que tener el claim subject
                 if (credential.payload.subject != null) {
-
+                    //se pasa la carga útil a los end points
                     JWTPrincipal(credential.payload)
                 } else {
                     null //  autenticación falla

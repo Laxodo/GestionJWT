@@ -11,8 +11,6 @@ import java.util.UUID
 
 
 fun main(args: Array<String>): Unit = EngineMain.main(args)
-
-
 fun Application.module() {
     //el orden importa
     //control de excepciones y http code status
@@ -21,12 +19,10 @@ fun Application.module() {
     configureKoin()
     //configuración de json
     configureSerialization()
-
     //JWT
     configureSecurity()
     //routing
     configureRouting()
-
 }
 /*
 fun ApplicationCall.requireUUID(iden: String = "id"): String {

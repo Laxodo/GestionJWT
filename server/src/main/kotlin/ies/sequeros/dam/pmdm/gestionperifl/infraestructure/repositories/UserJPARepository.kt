@@ -50,7 +50,6 @@ class UserJPARepository(override val emf: EntityManagerFactory) :
         return item?.let { UserMapper.toDomain(it) }
     }
 
-
     override fun delete(user: User) {
         executeTransaction({ em ->
             val ref: UserJPA? = em!!.getReference(UserJPA::class.java, user.id)
@@ -110,7 +109,7 @@ class UserJPARepository(override val emf: EntityManagerFactory) :
         )!!
     }
 
-    public override fun  create(user: User, password: String): User {
+    override fun  create(user: User, password: String): User {
         var userJPA = UserMapper.toJPA(user, password)
         executeTransaction({ em ->
             em!!.persist(userJPA)
@@ -119,7 +118,7 @@ class UserJPARepository(override val emf: EntityManagerFactory) :
         return UserMapper.toDomain(userJPA)
     }
 
-    public override  fun update(user: User): User {
+    override  fun update(user: User): User {
         var userJPA = UserMapper.toJPA(
             user
         )
@@ -133,6 +132,7 @@ class UserJPARepository(override val emf: EntityManagerFactory) :
         invalidateCache(this.tableName + "_all")
         return UserMapper.toDomain(userJPA)
     }
+
     public override  fun updateImage(user: User): User {
         var userJPA = UserMapper.toJPA(
             user
@@ -146,7 +146,6 @@ class UserJPARepository(override val emf: EntityManagerFactory) :
         invalidateCache(this.tableName + "_all")
         return UserMapper.toDomain(userJPA)
     }
-
 
     override fun updatePassword(userId: UUID, newPasswordHash: String): Boolean {
         var item: UserJPA? = null
@@ -194,7 +193,5 @@ class UserJPARepository(override val emf: EntityManagerFactory) :
         invalidateCache(this.tableName + key.name.toString() + "_exists_by_name")
         invalidateCache(this.tableName + key.email.toString() + "_exists_by_email")
         invalidateCache(this.tableName + key.email + "_" + key.name + "_exists_by_name_oremail")
-
-
     }
 }

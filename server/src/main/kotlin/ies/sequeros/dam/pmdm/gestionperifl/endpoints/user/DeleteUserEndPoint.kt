@@ -41,27 +41,15 @@ fun Route.deleteUserEndPoint() {
             schemaPath = "json_schemas/delete-user-command.schema.json"
         }
         handle {
+            //en el comando va la contrasenya
             val command = call.receive<DeleteCommand>()
             val principal = call.principal<JWTPrincipal>()
+            //se obtiene el id necesario
             val id = principal?.subject ?: throw InvalidCredentialsException("Error en credencial")
             val uuid = UUID.fromString(id)
+            //se llama al caso de uso
             deleteUseCase(uuid, command)
             call.respond(HttpStatusCode.NoContent)
         }
     }
-   /* route("") {
-        install(ValidateSchema) {
-            schemaPath = "json_schemas/delete-user-command.schema.json"
-        }
-        delete("") {
-
-            val command = call.receive<DeleteCommand>()
-            val principal = call.principal<JWTPrincipal>()
-            val id = principal?.subject ?: throw InvalidCredentialsException("Error en credencial")
-            val uuid = UUID.fromString(id)
-            deleteUseCase(uuid, command)
-            call.respond(HttpStatusCode.NoContent)
-
-        }
-    }*/
 }

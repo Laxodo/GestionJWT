@@ -6,26 +6,17 @@ import ies.sequeros.dam.pmdm.gestionperifl.endpoints.publico.registerEndPoint
 import ies.sequeros.dam.pmdm.gestionperifl.endpoints.user.*
 import io.ktor.server.auth.*
 import io.ktor.server.routing.*
-import org.koin.core.qualifier.named
-import org.koin.ktor.ext.inject
 
 fun Route.configureUserRoutes() {
 
     route("api") {
         route("public") {
-            //mejora el rendimiento solo se carga una vez el caso de uso
-            //si se pone dentro se instancia cada vez
-
-
             registerEndPoint()
             loginEndPoint()
             refreshEndPoint()
-
-
         }
+        //para el acceso al endpoint se ha de tener un token válido
         authenticate("auth-user") {
-
-            val baseUrl by inject<String>(named("baseUrl"))
             route("users") {
                 route("me") {
                     changePasswordEndPoint()
@@ -33,11 +24,8 @@ fun Route.configureUserRoutes() {
                     profileEndPoint()
                     updateUserEndPoint()
                     updateUserImageEndPoint()
-
-
                 }
             }
         }
     }
-
 }

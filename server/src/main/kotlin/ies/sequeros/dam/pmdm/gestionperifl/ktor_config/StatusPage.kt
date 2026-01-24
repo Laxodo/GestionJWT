@@ -25,6 +25,7 @@ import org.postgresql.util.PSQLException
 import java.net.ConnectException
 
 fun Application.configureStatusPages() {
+    //configuración
     install(StatusPages) {
         /**
          * EXCEPCIONES CAPA DE PRESENTACIÓN/ENDPOINTS

@@ -19,17 +19,20 @@ class ChangePasswordUseCase(
 ) {
     suspend operator fun invoke(id: UUID, command: ChangePasswordCommand): Unit =
         withContext(Dispatchers.IO) {
-            //val user=repository.findById(id)?: throw  InvalidCredentialsException("User")
+            //obtener el password antiguo
             val oldPassword=repository.getPasswordHash(id)?:throw InvalidCredentialsException("User")
+            //comprobar si el que llega nuevo es diferente al que ya existe
             if(passwordEnconder.matches(command.newPassword,oldPassword)){
                   throw BusinessException("La nueva clave ha de ser diferente a la anterior")
             }
+            //comprobar que el que llega antiguo es igual al que esta almacenado
             val match=passwordEnconder.matches(command.oldPassword,oldPassword)
-
             if(!match){
                 throw  InvalidCredentialsException("User")
             }
+            //codificar
             val newPassword=passwordEnconder.encode(command.newPassword)
+            //guardar
             repository.updatePassword(id,newPassword)
         }
 }

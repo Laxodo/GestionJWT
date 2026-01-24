@@ -9,7 +9,6 @@ interface IUserRepository {
     fun findById(id: UUID): User?
     fun findByEmail(email: String): User?
     fun findByUsername(username: String): User?
-
     fun create(user: User, password: String): User
     fun update(user: User): User
     fun delete(user: User): Unit
