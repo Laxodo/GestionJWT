@@ -10,7 +10,7 @@ group = "ies.sequeros.dam.pmdm.gestionperifl"
 version = "1.0.0"
 application {
     mainClass.set("ies.sequeros.dam.pmdm.gestionperifl.ApplicationKt")
-    
+
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
@@ -37,6 +37,7 @@ dependencies {
     implementation(libs.ktor.server.auth)
     implementation(libs.ktor.server.auth.jwt)
     implementation(libs.ktor.server.validator)
+    implementation("io.ktor:ktor-server-cors:3.3.0")
     //jpa con hibernate
     implementation("org.hibernate.orm:hibernate-core:6.4.4.Final")
     implementation("org.hibernate.orm:hibernate-hikaricp:6.4.4.Final")

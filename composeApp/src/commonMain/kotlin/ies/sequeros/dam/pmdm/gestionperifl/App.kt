@@ -18,12 +18,16 @@ import org.jetbrains.compose.resources.painterResource
 
 import gestionjwt.composeapp.generated.resources.Res
 import gestionjwt.composeapp.generated.resources.compose_multiplatform
+import ies.sequeros.dam.pmdm.gestionperifl.ui.appsettings.AppViewModel
+import ies.sequeros.dam.pmdm.gestionperifl.ui.login.LoginScreen
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 @Preview
 fun App() {
-    MaterialTheme {
-        var showContent by remember { mutableStateOf(false) }
+    val appViewModel: AppViewModel = koinViewModel()
+    AppTheme(appViewModel.isDarkMode.collectAsState()) {
+
         Column(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.primaryContainer)
@@ -31,19 +35,7 @@ fun App() {
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Button(onClick = { showContent = !showContent }) {
-                Text("Click me!")
-            }
-            AnimatedVisibility(showContent) {
-                val greeting = remember { Greeting().greet() }
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Image(painterResource(Res.drawable.compose_multiplatform), null)
-                    Text("Compose: $greeting")
-                }
-            }
+            LoginScreen({},{})
         }
     }
 }
