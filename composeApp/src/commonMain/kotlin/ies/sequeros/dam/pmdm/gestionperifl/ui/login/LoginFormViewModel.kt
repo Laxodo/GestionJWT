@@ -2,6 +2,7 @@ package ies.sequeros.dam.pmdm.gestionperifl.ui.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import ies.sequeros.dam.pmdm.gestionperifl.application.login.LoginUseCase
 
 import ies.sequeros.dam.pmdm.gestionperifl.ui.components.login.LoginState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class LoginFormViewModel(
     //inyectar caso de uso
-   // val loginUseCase: LoginUseCase
+   val loginUseCase: LoginUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(LoginState())
