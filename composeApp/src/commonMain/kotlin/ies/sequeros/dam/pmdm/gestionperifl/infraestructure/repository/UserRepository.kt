@@ -7,11 +7,13 @@ import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.cambiarcontraseña.ChangeP
 import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.login.LoginCommand
 import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.register.RegisterCommand
 import ies.sequeros.dam.pmdm.gestionperifl.dominio.IUserRepository
+import ies.sequeros.dam.pmdm.gestionperifl.dominio.User
 import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.TokenJwt
 import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.TokenStorage
 import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.entities.LoginDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
@@ -47,6 +49,13 @@ class UserRepository(private val url:String,private val _client: HttpClient): IU
         TODO("Not yet implemented")
     }
 
+    override suspend fun getUser(): Result<User> {
+        return runCatching {
+            val request = this._client.get("$url/api/users/me")
+            request.body<User>()
+        }
+    }
+
     override suspend fun delete(deleteUserCommand: DeleteUserCommand): Result<Boolean> {
         // TODO: Comporbar funcionamiento
         return runCatching {
@@ -65,14 +74,4 @@ class UserRepository(private val url:String,private val _client: HttpClient): IU
     override suspend fun changePassword(changePasswordCommand: ChangePasswordCommand): Result<Boolean> {
         TODO("Not yet implemented")
     }
-    /*
-    *
-    * when ()
-    * HTTPstatuscode.Unauthorized
-    *
-    * imagen devuelve User
-    *
-    * la imagen se envia en un formulario
-    *
-    * */
 }

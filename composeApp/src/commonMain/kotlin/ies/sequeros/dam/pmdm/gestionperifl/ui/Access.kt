@@ -15,6 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import ies.sequeros.dam.pmdm.gestionperifl.Routes
 import ies.sequeros.dam.pmdm.gestionperifl.ui.login.LoginScreen
+import ies.sequeros.dam.pmdm.gestionperifl.ui.register.RegisterScreen
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -27,7 +28,7 @@ fun Access() {
     val navegador: @Composable () -> Unit = {
         NavHost(
             navController = navController,
-            startDestination = Routes.ACCESS
+            startDestination = if (user != null) Routes.MAINAPP else Routes.ACCESS
         ){
             composable(Routes.ACCESS) {
                 AccessScreen(
@@ -37,7 +38,7 @@ fun Access() {
                         }
                     },
                     {
-                        navController.navigate(Routes.LOGIN){
+                        navController.navigate(Routes.REGISTER){
                             launchSingleTop = true
                         }
                     }
@@ -47,8 +48,15 @@ fun Access() {
                 Main()
             }
             composable(Routes.LOGIN) {
-                LoginScreen(
-                    {}
+                LoginScreen( { navController.popBackStack() } )
+            }
+            composable(Routes.REGISTER) {
+                RegisterScreen(
+                    {
+
+                    },{
+
+                    }
                 )
             }
         }
@@ -57,15 +65,6 @@ fun Access() {
     Scaffold() { innerPadding ->
         Box(Modifier.padding(innerPadding)) {
             navegador()
-            if (user != null){
-                navController.navigate(Routes.MAINAPP) {
-                    launchSingleTop = true
-                }
-            }else{
-                navController.navigate(Routes.ACCESS) {
-                    launchSingleTop = true
-                }
-            }
         }
     }
 

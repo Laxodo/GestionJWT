@@ -51,18 +51,27 @@ fun createHttpClient(tokenStorage: TokenStorage, refreshUrl:String): HttpClient 
         }
         install(Auth) {
             bearer {
-                sendWithoutRequest { request ->
-                    request.url.encodedPath.startsWith("/api/users/")
+                sendWithoutRequest {
+                    true
+                    /*request ->
+                    request.url.encodedPath.startsWith("/api/public/")*/
                 }
                 loadTokens {
-                    BearerTokens(tokenStorage.getAccessToken() ?: "", tokenStorage.getRefreshToken() ?: "")
-                    null
+                    val accessToken = tokenStorage.getAccessToken()
+                    val refreshToken = tokenStorage.getRefreshToken()
+
+                    if (accessToken != null && refreshToken != null) {
+                        BearerTokens(accessToken, refreshToken)
+                    } else {
+                        null
+                    }
                 }
 
                 // configurar el refresco
                 refreshTokens {
                     // Enviamos la petición de refresco como un mapa (JSON)
                     //end point de refresco
+                    println("DEBUG: ¡Iniciando proceso de refresco!")
                     val response = client.post(refreshUrl) {
                         markAsRefreshTokenRequest()
                         //token de refresco
@@ -72,14 +81,19 @@ fun createHttpClient(tokenStorage: TokenStorage, refreshUrl:String): HttpClient 
                     // Leemos la respuesta directamente como un Mapa
                         val data = response.body<Map<String, String>>()
                         // Extraer los valores usando las llaves del JSON
-                        val newAccess = data["access_token"] ?: ""
-                        val newRefresh = data["refresh_token"] ?: "antiguo refresh token" ?: ""
+                        val newAccess = data["access_token"]
+                        val newRefresh = data["refresh_token"] ?: tokenStorage.getRefreshToken()
                         val idToken = data["id_token"] // Será null si es OAuth, tendrá valor si es Google actualizra el almacen de tokens
                         // Opcional: Si existe id_token, aquí se podriña actualizar el perfilil
                         if (idToken != null) {
                             println("Se ha recibido identidad (OIDC): $idToken")
                         }
-                        BearerTokens(newAccess, newRefresh)
+                        if (newAccess != null && newRefresh != null){
+                            tokenStorage.saveTokens(newAccess, newRefresh, idToken ?: "")
+                            BearerTokens(newAccess, newRefresh)
+                        }else{
+                            null
+                        }
                     } else {
                         null
                     }

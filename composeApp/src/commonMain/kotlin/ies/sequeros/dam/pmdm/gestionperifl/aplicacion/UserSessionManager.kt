@@ -1,6 +1,7 @@
 package ies.sequeros.dam.pmdm.gestionperifl.aplicacion
 
 import com.russhwolf.settings.Settings
+import ies.sequeros.dam.pmdm.gestionperifl.dominio.IUserRepository
 import ies.sequeros.dam.pmdm.gestionperifl.dominio.User
 import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.TokenJwt
 import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.TokenStorage
@@ -9,24 +10,21 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-//TODO: revisar que vaya ahi el token storage.
-class UserSessionManager(private val tokenStorage: TokenStorage) {
-    //Todo: Aqui va la gestion de usuario con el token storage, aqui van los datos del usuario y del token, y no se que mas
+class UserSessionManager(private val tokenStorage: TokenStorage, private val repository: IUserRepository) {
 
     private val _currentUser = MutableStateFlow<User?>(null)
     val currentUser: StateFlow<User?> = _currentUser.asStateFlow()
 
-    fun session() {
+    suspend fun session() {
         val idTokenString = tokenStorage.getIdToken()
         val accessToken = tokenStorage.getAccessToken()
 
         if (!idTokenString.isNullOrBlank() && !accessToken.isNullOrBlank()) {
             try {
-                val jwt = TokenJwt(idTokenString)
+                val userRemote = repository.getUser()
 
-                if (jwt.isSessionValid()) {
-                    val user = userFromToken(jwt)
-                    _currentUser.update { user }
+                if (userRemote.getOrNull() != null) {
+                    _currentUser.update { userRemote.getOrNull() }
                 } else {
                     logout()
                 }
@@ -35,6 +33,16 @@ class UserSessionManager(private val tokenStorage: TokenStorage) {
             }
         }
     }
+    /*
+    val jwt = TokenJwt(idTokenString)
+
+                if (jwt.isSessionValid()) {
+                    val user = userFromToken(jwt)
+                    _currentUser.update { user }
+                } else {
+                    logout()
+                }
+    * */
 
     fun saveSession(access: String, refresh: String?, idToken: String) {
         tokenStorage.saveTokens(access, refresh, idToken)

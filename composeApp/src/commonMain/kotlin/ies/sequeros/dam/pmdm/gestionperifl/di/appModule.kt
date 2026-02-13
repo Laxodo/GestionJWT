@@ -1,8 +1,11 @@
 package ies.sequeros.dam.pmdm.gestionperifl.di
 
 import com.russhwolf.settings.Settings
+import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.GetUserUseCase
 import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.UserSessionManager
+import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.borrar.DeleteUserUseCase
 import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.login.LoginUseCase
+import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.update.UpdateUserUseCase
 import ies.sequeros.dam.pmdm.gestionperifl.dominio.IUserRepository
 import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.TokenStorage
 import ies.sequeros.dam.pmdm.gestionperifl.ui.MainViewModel
@@ -37,9 +40,12 @@ val appModulo = module {
      **/
     single { AppSettings() }
     single { TokenStorage( Settings() ) }
-    single { UserSessionManager(get()) }
+    single { UserSessionManager(get(), get()) }
 
     factory { LoginUseCase(get(), get()) }
+    factory { DeleteUserUseCase(get()) }
+    factory { UpdateUserUseCase(get()) }
+    factory { GetUserUseCase(get()) }
 
     single<IUserRepository> { UserRepository("http://localhost:8080", get()) }
 
