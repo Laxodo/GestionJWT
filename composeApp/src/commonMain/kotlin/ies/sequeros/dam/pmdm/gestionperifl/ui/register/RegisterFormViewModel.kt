@@ -101,7 +101,7 @@ class RegisterFormViewModel(
                 _state.update {
                     it.copy(
                         isLoading = false,
-                        errorMessage = "Error al conectar: {e.message}"
+                        errorMessage = "Error al conectar: ${e.message}"
                     )
                 }
             } finally {

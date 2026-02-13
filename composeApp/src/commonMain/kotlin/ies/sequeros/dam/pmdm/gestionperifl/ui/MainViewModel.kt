@@ -34,4 +34,20 @@ class MainViewModel(
     fun logout() {
         sessionManager.logout()
     }
+
+    fun seeProfile() {
+
+    }
+
+    fun changeImage() {
+
+    }
+
+    fun changePassword() {
+
+    }
+
+    fun changePerfile() {
+
+    }
 }

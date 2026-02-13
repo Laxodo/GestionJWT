@@ -4,14 +4,17 @@ import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.borrar.DeleteUserCommand
 import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.cambiarcontraseña.ChangePasswordCommand
 import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.login.LoginCommand
 import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.register.RegisterCommand
+import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.update.UpdateUserCommand
 import ies.sequeros.dam.pmdm.gestionperifl.dominio.IUserRepository
 import ies.sequeros.dam.pmdm.gestionperifl.dominio.User
 import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.entities.LoginEntity
 import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.entities.RegisterDto
+import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.entities.UpdateUserDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
+import io.ktor.client.request.patch
 import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
@@ -81,6 +84,30 @@ class UserRepository(private val url:String,private val _client: HttpClient): IU
     }
 
     override suspend fun changePassword(changePasswordCommand: ChangePasswordCommand): Result<Boolean> {
-        TODO("Not yet implemented")
+        return runCatching {
+            val request = this._client.put("$url/api/users/me/password") {
+                contentType(ContentType.Application.Json)
+                setBody(changePasswordCommand)
+            }
+            if(request.status.value !in 200..<300)
+                throw Exception("${request.status.value}-${request.status.description}")
+
+            true
+        }
+    }
+
+    override suspend fun updateUser(updateUserCommand: UpdateUserCommand): Result<UpdateUserDto> {
+        //TODO: Creo que así esta bien
+        return runCatching {
+            val request = this._client.patch( "$url/api/users/me" ) {
+                contentType(ContentType.Application.Json)
+                setBody(updateUserCommand)
+            }
+            if(request.status.value !in 200..<300)
+                throw Exception("${request.status.value}-${request.status.description}")
+
+            val item = request.body<UpdateUserDto>()
+            item
+        }
     }
 }
