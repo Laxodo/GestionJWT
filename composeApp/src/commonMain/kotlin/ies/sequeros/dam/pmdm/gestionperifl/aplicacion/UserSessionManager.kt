@@ -21,12 +21,19 @@ class UserSessionManager(private val tokenStorage: TokenStorage, private val rep
 
         if (!idTokenString.isNullOrBlank() && !accessToken.isNullOrBlank()) {
             try {
-                val userRemote = repository.getUser()
+                val jwt = TokenJwt(idTokenString)
 
-                if (userRemote.getOrNull() != null) {
-                    _currentUser.update { userRemote.getOrNull() }
+                if (jwt.isSessionValid()) {
+                    val user = userFromToken(jwt)
+                    _currentUser.update { user }
                 } else {
-                    logout()
+                    val userRemote = repository.getUser()
+
+                    if (userRemote.getOrNull() != null) {
+                        _currentUser.update { userRemote.getOrNull() }
+                    } else {
+                        logout()
+                    }
                 }
             } catch (e: Exception) {
                 logout()

@@ -3,7 +3,7 @@ package ies.sequeros.dam.pmdm.gestionperifl.infraestructure.entities
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LoginDto(
+data class LoginEntity(
     val access_token: String,
     val id_token: String,
     val expires_in: Long,

@@ -16,8 +16,8 @@ fun SuccessScreen() {
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "Has entrado, oleee",
-            fontSize = 24.sp,
+            text = "Bienvenido!",
+            fontSize = 36.sp,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.primary
         )
