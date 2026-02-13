@@ -26,10 +26,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun RegisterComponent(
     state: RegisterState,
+    onUsernameChange: (String) -> Unit,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onConfirmPassword: (String) -> Unit,
     onRegisterClick: () -> Unit,
     onCancel: () -> Unit
 ) {
@@ -49,14 +54,14 @@ fun RegisterComponent(
             )
             OutlinedTextField(
                 value = state.username,
-                onValueChange = { null },
+                onValueChange = { onUsernameChange(it) },
                 label = { Text("Nombre de Usuario") },
                 isError = state.usernameError != null
             )
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 value = state.email,
-                onValueChange = { null },
+                onValueChange = { onEmailChange(it) },
                 label = { Text("Email") },
                 modifier = Modifier.fillMaxWidth(),
                 isError = state.emailError != null,
@@ -69,13 +74,27 @@ fun RegisterComponent(
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 value = state.password,
-                onValueChange = { null },
+                onValueChange = { onPasswordChange(it) },
                 label = { Text("Contraseña") },
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth(),
                 isError = state.passwordError != null,
                 supportingText = {
                     state.passwordError?.let { Text(it) }
+                },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            OutlinedTextField(
+                value = state.verifyPassword,
+                onValueChange = { onConfirmPassword(it) },
+                label = { Text("Repetir contraseña") },
+                visualTransformation = PasswordVisualTransformation(),
+                modifier = Modifier.fillMaxWidth(),
+                isError = state.verifyPasswordError != null,
+                supportingText = {
+                    state.verifyPasswordError?.let { Text(it) }
                 },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
