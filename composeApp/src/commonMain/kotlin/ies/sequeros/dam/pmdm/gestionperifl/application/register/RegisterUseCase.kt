@@ -4,7 +4,7 @@ import ies.sequeros.dam.pmdm.gestionperifl.domain.IUserRepository
 
 
 class RegisterUseCase(private val repository: IUserRepository) {
-    suspend fun invoke(registerCommand: RegisterCommand): Result<Boolean> {
+    suspend operator fun invoke(registerCommand: RegisterCommand): Result<Boolean> {
         return repository.register(registerCommand)
     }
 }

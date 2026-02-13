@@ -4,9 +4,9 @@ import androidx.compose.ui.input.pointer.PointerEventPass
 
 data class RegisterState(
     // Campos Formulario
-    val email: String,
-    val username: String,
-    val password: String,
+    val email: String = "",
+    val username: String = "",
+    val password: String = "",
 
     // UI States
     val isLoading: Boolean = false,

@@ -16,7 +16,6 @@ class RegisterFromViewModel(
 ): ViewModel() {
     private val _state = MutableStateFlow(RegisterState())
     val state: StateFlow<RegisterState> = _state.asStateFlow()
-    val isFormValid = MutableStateFlow(false)
 
     fun register() {
         viewModelScope.launch {
