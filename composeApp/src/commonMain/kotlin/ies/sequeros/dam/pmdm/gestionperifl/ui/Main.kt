@@ -13,6 +13,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Image
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Logout
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -52,6 +56,30 @@ fun Main() {
                     mainViewModel.logout()
                 },
                 ""
+            ),
+            ItemOption(
+                Icons.Default.Person, {
+                    mainViewModel.seeProfile()
+                },
+                "Ver Perfil"
+            ),
+            ItemOption(
+                Icons.Default.Image, {
+                    mainViewModel.changeImage()
+                },
+                "Cambiar foto de Perfil"
+            ),
+            ItemOption(
+                Icons.Default.Lock, {
+                    mainViewModel.changePassword()
+                },
+                "Cambiar contraseña"
+            ),
+            ItemOption(
+                Icons.Default.Person, {
+                    mainViewModel.changePerfile()
+                },
+                "Modificar perfil"
             )
         )
     )
