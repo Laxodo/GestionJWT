@@ -21,7 +21,7 @@ services:
       POSTGRES_PASSWORD: administrador
       POSTGRES_DB: gestionjwt
     ports:
-      - "0.0.0.0:5433:5432"
+      - "0.0.0.0:5432:5432"
   adminer:
     container_name: adminer_ui
     image: adminer

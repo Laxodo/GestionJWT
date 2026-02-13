@@ -123,7 +123,6 @@ fun RegisterComponent(
                         shape = RoundedCornerShape(8.dp)
                     ) {
                         Text("Cancelar")
-                        rememberNavController().popBackStack()
                     }
                     Button(
                         onClick = {

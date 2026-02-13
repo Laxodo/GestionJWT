@@ -7,7 +7,6 @@ import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.register.RegisterCommand
 import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.entities.LoginEntity
 import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.update.UpdateUserCommand
 import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.TokenJwt
-import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.entities.LoginDto
 import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.entities.RegisterDto
 import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.entities.UpdateUserDto
 import io.ktor.http.cio.Request

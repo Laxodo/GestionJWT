@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.navigation.NavController
 import ies.sequeros.dam.pmdm.gestionperifl.ui.components.register.RegisterComponent
 import org.koin.compose.viewmodel.koinViewModel
 
