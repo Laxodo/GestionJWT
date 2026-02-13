@@ -29,7 +29,8 @@ import androidx.navigation.compose.rememberNavController
 @Composable
 fun ChangePasswordComponent(
     state: ChangePasswordState,
-    onPasswordChange: (String) -> Unit,
+    onCurrentPasswordChange: (String) -> Unit,
+    onNewPasswordChange: (String) -> Unit,
     onPasswordClick: () -> Unit,
     onCancel: () -> Unit
 ) {
@@ -49,7 +50,7 @@ fun ChangePasswordComponent(
             )
             OutlinedTextField(
                 value = state.password,
-                onValueChange = { onPasswordChange(it) },
+                onValueChange = { onCurrentPasswordChange(it) },
                 label = { Text("Contraseña del usuario") },
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth(),
@@ -63,7 +64,7 @@ fun ChangePasswordComponent(
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 value = state.newPassword,
-                onValueChange = { onPasswordChange(it) },
+                onValueChange = { onNewPasswordChange(it) },
                 label = { Text("Nueva contraseña del usuario") },
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth(),
@@ -96,7 +97,6 @@ fun ChangePasswordComponent(
                         shape = RoundedCornerShape(8.dp)
                     ) {
                         Text("Cancelar")
-                        rememberNavController().popBackStack()
                     }
                     Button(
                         onClick = {
