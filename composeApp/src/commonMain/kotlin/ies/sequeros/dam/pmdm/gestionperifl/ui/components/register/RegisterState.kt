@@ -7,6 +7,7 @@ data class RegisterState(
     val email: String = "",
     val username: String = "",
     val password: String = "",
+    val verifyPassword: String = "",
 
     // UI States
     val isLoading: Boolean = false,
@@ -17,6 +18,7 @@ data class RegisterState(
     val emailError: String? = null,
     val usernameError: String? = null,
     val passwordError: String? = null,
+    val verifyPasswordError: String? = null,
 
     //Error global (No internet)
     val errorMessage: String? = null

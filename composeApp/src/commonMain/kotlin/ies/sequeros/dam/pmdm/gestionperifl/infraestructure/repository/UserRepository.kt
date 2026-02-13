@@ -11,6 +11,7 @@ import ies.sequeros.dam.pmdm.gestionperifl.dominio.User
 import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.TokenJwt
 import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.TokenStorage
 import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.entities.LoginDto
+import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.entities.RegisterDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -45,8 +46,23 @@ class UserRepository(private val url:String,private val _client: HttpClient): IU
         }
     }
 
-    override suspend fun register(registerCommand: RegisterCommand): Result<Boolean> {
-        TODO("Not yet implemented")
+    override suspend fun register(registerCommand: RegisterCommand): Result<RegisterDto> {
+        return runCatching {
+            val request = this._client.post("$url/api/public/register") {
+                contentType(ContentType.Application.Json)
+                setBody(registerCommand)
+            }
+
+            when(request.status){
+                HttpStatusCode.Created -> ""
+                HttpStatusCode.BadRequest -> throw Exception("Usuario o contraseña no validos")
+                HttpStatusCode.Conflict -> throw Exception("Usuario o contraseña incorrecto")
+                else -> throw Exception(request.status.description)
+            }
+
+            val item = request.body<RegisterDto>()
+            item
+        }
     }
 
     override suspend fun getUser(): Result<User> {

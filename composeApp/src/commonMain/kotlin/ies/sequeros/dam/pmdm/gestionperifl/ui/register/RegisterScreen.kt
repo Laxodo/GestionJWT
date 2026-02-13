@@ -1,6 +1,5 @@
 package ies.sequeros.dam.pmdm.gestionperifl.ui.register
 
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -14,7 +13,7 @@ fun RegisterScreen(
     onRegister: () -> Unit,
     onCancel: () -> Unit,
 ) {
-    val viewModel = koinViewModel<RegisterFromViewModel>()
+    val viewModel = koinViewModel<RegisterFormViewModel>()
     // estado del formulario
     val state by viewModel.state.collectAsState()
     // estado correcto, revisa el padre
@@ -24,8 +23,11 @@ fun RegisterScreen(
         }
     }
 
-    RegisterComponent(
-        state,
+    RegisterComponent(state,
+        viewModel::onUsernameChange,
+        viewModel::onEmailChange,
+        viewModel::onPasswordChange,
+        viewModel::onConfirmPassword,
         {
             viewModel.register()
         }, {
