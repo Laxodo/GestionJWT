@@ -7,4 +7,7 @@ object Routes {
     const val LOGIN = "login"
     const val REGISTER = "register"
     const val DELETE = "delete"
+    const val CHANGEPASSWORD = "changepassword"
+    const val UPDATEUSER = "updateuser"
+    const val CHANGEPHOTO = "changephoto"
 }

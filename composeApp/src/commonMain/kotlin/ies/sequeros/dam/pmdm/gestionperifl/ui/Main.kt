@@ -40,6 +40,8 @@ import androidx.window.core.layout.WindowWidthSizeClass
 import ies.sequeros.dam.pmdm.gestionperifl.Routes
 import ies.sequeros.dam.pmdm.gestionperifl.ui.delete.Delete
 import ies.sequeros.dam.pmdm.gestionperifl.ui.delete.DeleteFormViewModel
+import ies.sequeros.dam.pmdm.gestionperifl.ui.gestion.actualizarPerfil.UpdateUserScreen
+import ies.sequeros.dam.pmdm.gestionperifl.ui.gestion.cambiarContraseña.changePasswordScreen
 import ies.sequeros.dam.pmdm.gestionperifl.ui.login.LoginScreen
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -56,6 +58,24 @@ fun Main() {
     mainViewModel.setOptions(
         listOf(
             ItemOption(
+                Icons.Default.Person, {
+                    navController.navigate(Routes.UPDATEUSER)
+                },
+                "Ver Perfil"
+            ),
+            ItemOption(
+                Icons.Default.Lock, {
+                    navController.navigate(Routes.CHANGEPASSWORD)
+                },
+                "Cambiar contraseña"
+            ),
+            ItemOption(
+                Icons.Default.Person, {
+                    navController.navigate(Routes.UPDATEUSER)
+                },
+                "Modificar perfil"
+            ),
+            ItemOption(
                 Icons.Default.Delete, {
                     navController.navigate(Routes.DELETE){
                         launchSingleTop = true
@@ -68,30 +88,6 @@ fun Main() {
                     mainViewModel.logout()
                 },
                 ""
-            ),
-            ItemOption(
-                Icons.Default.Person, {
-                    navController.navigate(Routes)
-                },
-                "Ver Perfil"
-            ),
-            ItemOption(
-                Icons.Default.Image, {
-                    mainViewModel.changeImage()
-                },
-                "Cambiar foto de Perfil"
-            ),
-            ItemOption(
-                Icons.Default.Lock, {
-                    mainViewModel.changePassword()
-                },
-                "Cambiar contraseña"
-            ),
-            ItemOption(
-                Icons.Default.Person, {
-                    mainViewModel.changePerfile()
-                },
-                "Modificar perfil"
             )
         )
     )
@@ -104,6 +100,7 @@ fun Main() {
             composable(Routes.MainMenu) {
                 SuccessScreen()
             }
+
             composable(Routes.DELETE){
                 Delete(
                     deleteFormViewModel,
@@ -112,6 +109,33 @@ fun Main() {
                     }
                 )
             }
+
+            composable(Routes.UPDATEUSER) {
+                UpdateUserScreen(
+                    {
+
+                    },
+                    {
+
+                    }
+                )
+            }
+
+            composable(Routes.CHANGEPASSWORD) {
+                changePasswordScreen(
+                    {
+
+                    },
+                    {
+
+                    }
+                )
+            }
+
+            composable(Routes.UPDATEUSER) {
+
+            }
+
         }
     }
 

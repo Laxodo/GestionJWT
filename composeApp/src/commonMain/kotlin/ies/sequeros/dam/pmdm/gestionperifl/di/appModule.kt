@@ -4,6 +4,7 @@ import com.russhwolf.settings.Settings
 import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.GetUserUseCase
 import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.UserSessionManager
 import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.borrar.DeleteUserUseCase
+import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.cambiarcontraseña.ChangePasswordUseCase
 import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.login.LoginUseCase
 import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.register.RegisterUseCase
 import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.update.UpdateUserUseCase
@@ -15,6 +16,8 @@ import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.repository.UserReposi
 import ies.sequeros.dam.pmdm.gestionperifl.ui.appsettings.AppSettings
 import ies.sequeros.dam.pmdm.gestionperifl.ui.appsettings.AppViewModel
 import ies.sequeros.dam.pmdm.gestionperifl.ui.delete.DeleteFormViewModel
+import ies.sequeros.dam.pmdm.gestionperifl.ui.gestion.actualizarPerfil.UpdateUserFormViewModel
+import ies.sequeros.dam.pmdm.gestionperifl.ui.gestion.cambiarContraseña.ChangePasswordFormViewModel
 import ies.sequeros.dam.pmdm.gestionperifl.ui.login.LoginFormViewModel
 import ies.sequeros.dam.pmdm.gestionperifl.ui.register.RegisterFormViewModel
 import ies.sequeros.dam.pmdm.gestionperifl.ui.register.RegisterScreen
@@ -51,6 +54,7 @@ val appModulo = module {
     factory { UpdateUserUseCase(get()) }
     factory { GetUserUseCase(get()) }
     factory { RegisterUseCase(get()) }
+    factory { ChangePasswordUseCase(get()) }
 
     single<IUserRepository> { UserRepository("http://localhost:8080", get()) }
 
@@ -59,5 +63,7 @@ val appModulo = module {
     viewModel { MainViewModel(get()) }
     viewModel { RegisterFormViewModel(get()) }
     viewModel { DeleteFormViewModel(get()) }
+    viewModel { UpdateUserFormViewModel(get()) }
+    viewModel { ChangePasswordFormViewModel(get()) }
 
 }
