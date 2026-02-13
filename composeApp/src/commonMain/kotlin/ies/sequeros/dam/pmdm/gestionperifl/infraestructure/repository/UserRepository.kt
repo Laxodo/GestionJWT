@@ -5,6 +5,7 @@ import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.UserSessionManager
 import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.borrar.DeleteUserCommand
 import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.cambiarcontraseña.ChangePasswordCommand
 import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.login.LoginCommand
+import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.register.RegisterCommand
 import ies.sequeros.dam.pmdm.gestionperifl.dominio.IUserRepository
 import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.TokenJwt
 import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.TokenStorage
@@ -40,6 +41,10 @@ class UserRepository(private val url:String,private val _client: HttpClient): IU
             val item = request.body<LoginDto>()
             item
         }
+    }
+
+    override suspend fun register(registerCommand: RegisterCommand): Result<Boolean> {
+        TODO("Not yet implemented")
     }
 
     override suspend fun delete(deleteUserCommand: DeleteUserCommand): Result<Boolean> {

@@ -30,12 +30,26 @@ fun Access() {
             startDestination = Routes.ACCESS
         ){
             composable(Routes.ACCESS) {
-                LoginScreen(
-                    {}
+                AccessScreen(
+                    {
+                        navController.navigate(Routes.LOGIN){
+                            launchSingleTop = true
+                        }
+                    },
+                    {
+                        navController.navigate(Routes.LOGIN){
+                            launchSingleTop = true
+                        }
+                    }
                 )
             }
             composable(Routes.MAINAPP) {
                 Main()
+            }
+            composable(Routes.LOGIN) {
+                LoginScreen(
+                    {}
+                )
             }
         }
     }

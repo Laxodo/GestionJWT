@@ -1,6 +1,6 @@
-package ies.sequeros.dam.pmdm.gestionperifl.application.register
+package ies.sequeros.dam.pmdm.gestionperifl.aplicacion.register
 
-import ies.sequeros.dam.pmdm.gestionperifl.domain.IUserRepository
+import ies.sequeros.dam.pmdm.gestionperifl.dominio.IUserRepository
 
 
 class RegisterUseCase(private val repository: IUserRepository) {
