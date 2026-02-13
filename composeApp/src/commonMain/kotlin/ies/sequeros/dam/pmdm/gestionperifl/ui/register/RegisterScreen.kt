@@ -11,7 +11,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun RegisterScreen(
     onRegister: () -> Unit,
-    onCancel: () -> Unit,
+    onCancel: () -> Unit
 ) {
     val viewModel = koinViewModel<RegisterFormViewModel>()
     // estado del formulario

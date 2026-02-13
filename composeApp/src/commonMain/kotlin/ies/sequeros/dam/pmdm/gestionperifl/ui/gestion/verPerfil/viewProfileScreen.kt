@@ -1,4 +1,10 @@
 package ies.sequeros.dam.pmdm.gestionperifl.ui.gestion.verPerfil
 
-class viewProfileScreen {
+import androidx.compose.runtime.Composable
+
+@Composable
+fun viewProfileScreen(
+
+) {
+
 }

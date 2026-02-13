@@ -59,7 +59,7 @@ fun Main() {
             ),
             ItemOption(
                 Icons.Default.Person, {
-                    mainViewModel.seeProfile()
+                    navController.navigate(Routes)
                 },
                 "Ver Perfil"
             ),
