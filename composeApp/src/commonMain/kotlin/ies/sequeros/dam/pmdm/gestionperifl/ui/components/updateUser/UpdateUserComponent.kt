@@ -1,4 +1,4 @@
-package ies.sequeros.dam.pmdm.gestionperifl.ui.components.changePassword
+package ies.sequeros.dam.pmdm.gestionperifl.ui.components.updateUser
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -21,16 +20,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun ChangePasswordComponent(
-    state: ChangePasswordState,
-    onPasswordChange: (String) -> Unit,
-    onPasswordClick: () -> Unit,
+fun UpdateUserComponent(
+    state: UpdateUserState,
+    onUserUpdate: (String) -> Unit,
+    onUpdateClick: () -> Unit,
     onCancel: () -> Unit
 ) {
     Box(
@@ -43,36 +41,17 @@ fun ChangePasswordComponent(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Cambio de contraseña",
+                text = "Cambiar nombre de Usuario",
                 style = MaterialTheme.typography.displaySmall,
                 modifier = Modifier.padding(bottom = 32.dp)
             )
             OutlinedTextField(
-                value = state.password,
-                onValueChange = { onPasswordChange(it) },
+                value = state.newUsername,
+                onValueChange = { onUserUpdate(it) },
                 label = { Text("Contraseña del usuario") },
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth(),
-                supportingText = {
-                    state.passwordError?.let { Text(it) }
-                },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                isError = state.passwordError != null
-                )
-            Spacer(modifier = Modifier.height(8.dp))
-            OutlinedTextField(
-                value = state.newPassword,
-                onValueChange = { onPasswordChange(it) },
-                label = { Text("Nueva contraseña del usuario") },
-                visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth(),
-                supportingText = {
-                    state.newPasswordError?.let { Text(it) }
-                },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                isError = state.newPasswordError != null,
+                isError = state.newUsernameError != null
             )
             if (state.errorMessage != null) {
                 Spacer(modifier = Modifier.height(16.dp))
@@ -100,7 +79,7 @@ fun ChangePasswordComponent(
                     }
                     Button(
                         onClick = {
-                            onPasswordClick()
+                            onUpdateClick()
                         },
                         modifier = Modifier.weight(1f),
                         enabled = state.isValid && !state.isLoading,

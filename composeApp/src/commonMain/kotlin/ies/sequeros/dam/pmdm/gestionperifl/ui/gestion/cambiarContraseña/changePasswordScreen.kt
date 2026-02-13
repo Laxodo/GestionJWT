@@ -25,6 +25,6 @@ fun changePasswordScreen(
         {
             viewModel.changePassword()
         }, {
-            onCancel
+            onCancel()
         })
 }

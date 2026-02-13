@@ -1,11 +1,8 @@
 package ies.sequeros.dam.pmdm.gestionperifl.infraestructure.entities
 
-import kotlinx.serialization.Serializable
-
-@Serializable
-data class RegisterDto(
+data class UpdateUserDto(
     val id: String,
     val username: String,
-    val password: String,
+    val email: String,
     val image: String? = null
 )
