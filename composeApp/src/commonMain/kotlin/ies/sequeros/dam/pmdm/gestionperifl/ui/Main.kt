@@ -18,6 +18,8 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -42,6 +44,7 @@ import ies.sequeros.dam.pmdm.gestionperifl.ui.delete.Delete
 import ies.sequeros.dam.pmdm.gestionperifl.ui.delete.DeleteFormViewModel
 import ies.sequeros.dam.pmdm.gestionperifl.ui.gestion.actualizarPerfil.UpdateUserScreen
 import ies.sequeros.dam.pmdm.gestionperifl.ui.gestion.cambiarContraseña.changePasswordScreen
+import ies.sequeros.dam.pmdm.gestionperifl.ui.gestion.listarusuario.ListarUsuario
 import ies.sequeros.dam.pmdm.gestionperifl.ui.login.LoginScreen
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -58,20 +61,26 @@ fun Main() {
     mainViewModel.setOptions(
         listOf(
             ItemOption(
-                Icons.Default.Person, {
-                    navController.navigate(Routes.UPDATEUSER)
+                Icons.Default.List, {
+                    navController.navigate(Routes.LISTUSER){
+                        launchSingleTop = true
+                    }
                 },
                 "Ver Perfil"
             ),
             ItemOption(
                 Icons.Default.Lock, {
-                    navController.navigate(Routes.CHANGEPASSWORD)
+                    navController.navigate(Routes.CHANGEPASSWORD){
+                        launchSingleTop = true
+                    }
                 },
                 "Cambiar contraseña"
             ),
             ItemOption(
-                Icons.Default.Person, {
-                    navController.navigate(Routes.UPDATEUSER)
+                Icons.Default.Edit, {
+                    navController.navigate(Routes.UPDATEUSER){
+                        launchSingleTop = true
+                    }
                 },
                 "Modificar perfil"
             ),
@@ -132,8 +141,8 @@ fun Main() {
                 )
             }
 
-            composable(Routes.UPDATEUSER) {
-
+            composable(Routes.LISTUSER) {
+                ListarUsuario()
             }
 
         }

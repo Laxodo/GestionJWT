@@ -9,5 +9,5 @@ object Routes {
     const val DELETE = "delete"
     const val CHANGEPASSWORD = "changepassword"
     const val UPDATEUSER = "updateuser"
-    const val CHANGEPHOTO = "changephoto"
+    const val LISTUSER = "listuser"
 }

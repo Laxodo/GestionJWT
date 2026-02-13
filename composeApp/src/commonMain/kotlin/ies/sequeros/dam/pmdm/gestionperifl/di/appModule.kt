@@ -18,6 +18,7 @@ import ies.sequeros.dam.pmdm.gestionperifl.ui.appsettings.AppViewModel
 import ies.sequeros.dam.pmdm.gestionperifl.ui.delete.DeleteFormViewModel
 import ies.sequeros.dam.pmdm.gestionperifl.ui.gestion.actualizarPerfil.UpdateUserFormViewModel
 import ies.sequeros.dam.pmdm.gestionperifl.ui.gestion.cambiarContraseña.ChangePasswordFormViewModel
+import ies.sequeros.dam.pmdm.gestionperifl.ui.gestion.listarusuario.ListarUsuarioFormViewModel
 import ies.sequeros.dam.pmdm.gestionperifl.ui.login.LoginFormViewModel
 import ies.sequeros.dam.pmdm.gestionperifl.ui.register.RegisterFormViewModel
 import ies.sequeros.dam.pmdm.gestionperifl.ui.register.RegisterScreen
@@ -65,5 +66,6 @@ val appModulo = module {
     viewModel { DeleteFormViewModel(get()) }
     viewModel { UpdateUserFormViewModel(get()) }
     viewModel { ChangePasswordFormViewModel(get()) }
+    viewModel { ListarUsuarioFormViewModel(get()) }
 
 }
