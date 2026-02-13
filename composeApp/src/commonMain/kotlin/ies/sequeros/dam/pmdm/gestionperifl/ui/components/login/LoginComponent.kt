@@ -120,16 +120,6 @@ fun LoginComponent (state: LoginState,
                     ) {
                         Text("Entrar")
                     }
-                    if (state.errorMessage != null) {
-                        Text(
-                            text = state.errorMessage,
-                            color = MaterialTheme.colorScheme.error,
-                            style = MaterialTheme.typography.bodySmall,
-                            modifier = Modifier
-                                .padding(bottom = 8.dp)
-                                .fillMaxWidth()
-                        )
-                    }
                 }
             }
         }

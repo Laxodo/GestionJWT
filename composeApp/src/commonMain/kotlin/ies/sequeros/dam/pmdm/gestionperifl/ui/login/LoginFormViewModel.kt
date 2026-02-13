@@ -2,7 +2,8 @@ package ies.sequeros.dam.pmdm.gestionperifl.ui.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import ies.sequeros.dam.pmdm.gestionperifl.application.login.LoginUseCase
+import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.login.LoginUseCase
+import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.login.LoginCommand
 
 import ies.sequeros.dam.pmdm.gestionperifl.ui.components.login.LoginState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,9 +11,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.time.Clock
 
 class LoginFormViewModel(
-    //inyectar caso de uso
    val loginUseCase: LoginUseCase
 ) : ViewModel() {
 
@@ -53,29 +54,24 @@ class LoginFormViewModel(
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, errorMessage = null) }
             try {
-                //cargando
                 _state.value = state.value.copy(isLoading = true)
-                //crear el comando, llamar al caso de uso
-                //que devuelve ok, o un error en el result
-                /*
                 val loginCommand =
                     LoginCommand(
                         email = state.value.email,
                         password = state.value.password
                     )
-
-                val result=loginUseCase(loginCommand).onSuccess{
-                    //_state.value = _state.value.copy(isLoginSuccess = true)
+                val result = loginUseCase.invoke(loginCommand).onSuccess{
+                    _state.value = _state.value.copy(isLoginSuccess = true)
+                    println("Access token: $it.access_token")
                     _state.update { it.copy(isLoading = false, isLoginSuccess = true) }
 
                 }.onFailure {
                     _state.update { it.copy(isLoading = false, isLoginSuccess = false) }
-                    //meter aqui el error
-
-                }*/
-
-
-
+                    val error = it.message?.split("-")[0]
+                    if(error == "409"){
+                        _state.update { it.copy(errorMessage = "Usuario o contraseña incorrectos") }
+                    }
+                }
             } catch (e: Exception) {
                 _state.update {
                     it.copy(
