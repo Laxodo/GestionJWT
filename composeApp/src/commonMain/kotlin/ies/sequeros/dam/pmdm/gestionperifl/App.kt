@@ -18,24 +18,19 @@ import org.jetbrains.compose.resources.painterResource
 
 import gestionjwt.composeapp.generated.resources.Res
 import gestionjwt.composeapp.generated.resources.compose_multiplatform
+import ies.sequeros.dam.pmdm.gestionperifl.ui.Access
+import ies.sequeros.dam.pmdm.gestionperifl.ui.Main
 import ies.sequeros.dam.pmdm.gestionperifl.ui.appsettings.AppViewModel
 import ies.sequeros.dam.pmdm.gestionperifl.ui.login.LoginScreen
 import org.koin.compose.viewmodel.koinViewModel
+
+//expect fun getSettings(): Settings
 
 @Composable
 @Preview
 fun App() {
     val appViewModel: AppViewModel = koinViewModel()
     AppTheme(appViewModel.isDarkMode.collectAsState()) {
-
-        Column(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.primaryContainer)
-                .safeContentPadding()
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            LoginScreen({},{})
-        }
+        Access()
     }
 }

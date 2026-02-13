@@ -103,7 +103,7 @@ kotlin {
             implementation("io.github.vinceglb:filekit-coil:0.12.0")
 
             //almacenamiento token seguro
-            implementation("com.russhwolf:multiplatform-settings:1.3.0")
+            implementation("com.russhwolf:multiplatform-settings-no-arg:1.3.0")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
