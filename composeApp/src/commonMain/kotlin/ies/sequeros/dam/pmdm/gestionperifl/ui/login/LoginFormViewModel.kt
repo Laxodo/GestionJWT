@@ -67,10 +67,10 @@ class LoginFormViewModel(
 
                 }.onFailure {
                     _state.update { it.copy(isLoading = false, isLoginSuccess = false) }
-                    val error = it.message?.split("-")[0]
-                    if(error == "409"){
-                        _state.update { it.copy(errorMessage = "Usuario o contraseña incorrectos") }
-                    }
+                    println("Error aqui")
+                    val error = it.message
+                    _state.update { it.copy(errorMessage = error!!) }
+                    println("Este es el error guardado: ->>> ${_state.value.errorMessage}")
                 }
             } catch (e: Exception) {
                 _state.update {

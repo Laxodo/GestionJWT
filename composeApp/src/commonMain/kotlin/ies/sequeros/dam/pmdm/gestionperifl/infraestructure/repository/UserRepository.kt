@@ -16,6 +16,7 @@ import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.request
 import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.cio.Request
 import io.ktor.http.cio.Response
 import io.ktor.http.contentType
@@ -29,8 +30,12 @@ class UserRepository(private val url:String,private val _client: HttpClient): IU
                 setBody(loginCommand)
             }
 
-            if(request.status.value !in 200..<300)
-                throw Exception("${request.status.value}-${request.status.description}")
+            when(request.status){
+                HttpStatusCode.OK, HttpStatusCode.Created -> ""
+                HttpStatusCode.BadRequest -> throw Exception("Usuario o contraseña no validos")
+                HttpStatusCode.Conflict -> throw Exception("Usuario o contraseña incorrecto")
+                else -> throw Exception(request.status.description)
+            }
 
             val item = request.body<LoginDto>()
             item
