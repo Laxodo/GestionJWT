@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -33,6 +34,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.window.core.layout.WindowWidthSizeClass
 import ies.sequeros.dam.pmdm.gestionperifl.Routes
+import ies.sequeros.dam.pmdm.gestionperifl.ui.delete.Delete
+import ies.sequeros.dam.pmdm.gestionperifl.ui.delete.DeleteFormViewModel
 import ies.sequeros.dam.pmdm.gestionperifl.ui.login.LoginScreen
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -40,6 +43,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun Main() {
 
     val mainViewModel: MainViewModel = koinViewModel()
+    val deleteFormViewModel: DeleteFormViewModel = koinViewModel()
     val navController = rememberNavController()
 
     val options by mainViewModel.options.collectAsState()
@@ -47,6 +51,14 @@ fun Main() {
 
     mainViewModel.setOptions(
         listOf(
+            ItemOption(
+                Icons.Default.Delete, {
+                    navController.navigate(Routes.DELETE){
+                        launchSingleTop = true
+                    }
+                },
+                ""
+            ),
             ItemOption(
                 Icons.Default.Close, {
                     mainViewModel.logout()
@@ -63,6 +75,14 @@ fun Main() {
         ){
             composable(Routes.MainMenu) {
                 SuccessScreen()
+            }
+            composable(Routes.DELETE){
+                Delete(
+                    deleteFormViewModel,
+                    {
+                        mainViewModel.logout()
+                    }
+                )
             }
         }
     }

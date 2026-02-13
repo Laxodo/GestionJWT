@@ -6,4 +6,5 @@ object Routes {
     const val MainMenu = "MainMenu"
     const val LOGIN = "login"
     const val REGISTER = "register"
+    const val DELETE = "delete"
 }

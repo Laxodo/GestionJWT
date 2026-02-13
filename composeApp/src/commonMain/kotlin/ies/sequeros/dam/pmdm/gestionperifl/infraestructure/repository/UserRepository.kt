@@ -10,6 +10,7 @@ import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.entities.LoginEntity
 import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.entities.RegisterDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.put
@@ -67,7 +68,7 @@ class UserRepository(private val url:String,private val _client: HttpClient): IU
     override suspend fun delete(deleteUserCommand: DeleteUserCommand): Result<Boolean> {
         // TODO: Comporbar funcionamiento
         return runCatching {
-            val request = this._client.put("$url/api/users/me/password") {
+            val request = this._client.delete("$url/api/users/me"){
                 contentType(ContentType.Application.Json)
                 setBody(deleteUserCommand)
             }

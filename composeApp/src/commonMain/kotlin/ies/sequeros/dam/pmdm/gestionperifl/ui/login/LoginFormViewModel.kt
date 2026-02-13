@@ -70,7 +70,6 @@ class LoginFormViewModel(
                     println("Error aqui")
                     val error = it.message
                     _state.update { it.copy(errorMessage = error!!) }
-                    println("Este es el error guardado: ->>> ${_state.value.errorMessage}")
                 }
             } catch (e: Exception) {
                 _state.update {
