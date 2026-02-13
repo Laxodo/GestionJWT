@@ -1,34 +1,28 @@
 package ies.sequeros.dam.pmdm.gestionperifl.infraestructure.repository
 
-import com.russhwolf.settings.Settings
-import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.UserSessionManager
 import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.borrar.DeleteUserCommand
 import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.cambiarcontraseña.ChangePasswordCommand
 import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.login.LoginCommand
 import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.register.RegisterCommand
 import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.update.UpdateUserCommand
 import ies.sequeros.dam.pmdm.gestionperifl.dominio.IUserRepository
-import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.TokenJwt
-import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.TokenStorage
-import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.entities.LoginDto
+import ies.sequeros.dam.pmdm.gestionperifl.dominio.User
+import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.entities.LoginEntity
 import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.entities.RegisterDto
 import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.entities.UpdateUserDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.get
 import io.ktor.client.request.patch
 import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
-import io.ktor.client.statement.request
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
-import io.ktor.http.cio.Request
-import io.ktor.http.cio.Response
 import io.ktor.http.contentType
-import kotlinx.serialization.json.JsonElement
 
 class UserRepository(private val url:String,private val _client: HttpClient): IUserRepository {
-    override suspend fun login(loginCommand: LoginCommand): Result<LoginDto> {
+    override suspend fun login(loginCommand: LoginCommand): Result<LoginEntity> {
         return runCatching {
             val request = this._client.post("$url/api/public/login") {
                 contentType(ContentType.Application.Json)
@@ -42,7 +36,7 @@ class UserRepository(private val url:String,private val _client: HttpClient): IU
                 else -> throw Exception(request.status.description)
             }
 
-            val item = request.body<LoginDto>()
+            val item = request.body<LoginEntity>()
             item
         }
     }
@@ -63,6 +57,13 @@ class UserRepository(private val url:String,private val _client: HttpClient): IU
 
             val item = request.body<RegisterDto>()
             item
+        }
+    }
+
+    override suspend fun getUser(): Result<User> {
+        return runCatching {
+            val request = this._client.get("$url/api/users/me")
+            request.body<User>()
         }
     }
 
@@ -108,14 +109,4 @@ class UserRepository(private val url:String,private val _client: HttpClient): IU
             item
         }
     }
-    /*
-    *
-    * when ()
-    * HTTPstatuscode.Unauthorized
-    *
-    * imagen devuelve User
-    *
-    * la imagen se envia en un formulario
-    *
-    * */
 }

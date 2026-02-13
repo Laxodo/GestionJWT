@@ -1,8 +1,12 @@
 package ies.sequeros.dam.pmdm.gestionperifl.di
 
 import com.russhwolf.settings.Settings
+import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.GetUserUseCase
 import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.UserSessionManager
+import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.borrar.DeleteUserUseCase
 import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.login.LoginUseCase
+import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.register.RegisterUseCase
+import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.update.UpdateUserUseCase
 import ies.sequeros.dam.pmdm.gestionperifl.dominio.IUserRepository
 import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.TokenStorage
 import ies.sequeros.dam.pmdm.gestionperifl.ui.MainViewModel
@@ -11,6 +15,8 @@ import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.repository.UserReposi
 import ies.sequeros.dam.pmdm.gestionperifl.ui.appsettings.AppSettings
 import ies.sequeros.dam.pmdm.gestionperifl.ui.appsettings.AppViewModel
 import ies.sequeros.dam.pmdm.gestionperifl.ui.login.LoginFormViewModel
+import ies.sequeros.dam.pmdm.gestionperifl.ui.register.RegisterFormViewModel
+import ies.sequeros.dam.pmdm.gestionperifl.ui.register.RegisterScreen
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
@@ -37,14 +43,19 @@ val appModulo = module {
      **/
     single { AppSettings() }
     single { TokenStorage( Settings() ) }
-    single { UserSessionManager(get()) }
+    single { UserSessionManager(get(), get()) }
 
     factory { LoginUseCase(get(), get()) }
+    factory { DeleteUserUseCase(get()) }
+    factory { UpdateUserUseCase(get()) }
+    factory { GetUserUseCase(get()) }
+    factory { RegisterUseCase(get()) }
 
     single<IUserRepository> { UserRepository("http://localhost:8080", get()) }
 
     viewModel { AppViewModel(get()) }
     viewModel { LoginFormViewModel(get()) }
     viewModel { MainViewModel(get()) }
+    viewModel { RegisterFormViewModel(get()) }
 
 }
