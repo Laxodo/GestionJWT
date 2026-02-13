@@ -27,6 +27,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun RegisterComponent(
@@ -121,6 +123,7 @@ fun RegisterComponent(
                         shape = RoundedCornerShape(8.dp)
                     ) {
                         Text("Cancelar")
+                        rememberNavController().popBackStack()
                     }
                     Button(
                         onClick = {
