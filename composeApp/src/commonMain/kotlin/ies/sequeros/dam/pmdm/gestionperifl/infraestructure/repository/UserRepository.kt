@@ -85,10 +85,7 @@ class UserRepository(private val url:String,private val _client: HttpClient): IU
 
     override suspend fun changePassword(changePasswordCommand: ChangePasswordCommand): Result<Boolean> {
         return runCatching {
-            val request = this._client.put("$url/api/users/me/password") {
-                contentType(ContentType.Application.Json)
-                setBody(changePasswordCommand)
-            }
+            val request = this._client.put("$url/api/users/me/password")
             if(request.status.value !in 200..<300)
                 throw Exception("${request.status.value}-${request.status.description}")
 

@@ -14,17 +14,20 @@ fun changePasswordScreen(
 ) {
     val viewModel = koinViewModel<ChangePasswordFormViewModel>()
     val state by viewModel.state.collectAsState()
+
     LaunchedEffect(state.isChangePasswordSuccess) {
-        if(state.isChangePasswordSuccess) {
+        if (state.isChangePasswordSuccess) {
             onChangePassword()
         }
     }
 
     ChangePasswordComponent(state,
-        viewModel::onPasswordChange,
+        viewModel::onCurrentPasswordChange,
+        viewModel::onNewPasswordChange,
         {
             viewModel.changePassword()
         }, {
             onCancel()
-        })
+        }
+    )
 }
