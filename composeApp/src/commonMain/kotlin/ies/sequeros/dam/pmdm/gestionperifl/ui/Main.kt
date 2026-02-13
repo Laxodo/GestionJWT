@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Category
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -44,27 +45,13 @@ fun Main() {
     val options by mainViewModel.options.collectAsState()
     val window = currentWindowAdaptiveInfo()
 
-    val user by mainViewModel.currentUserState.collectAsState()
-
-
-
     mainViewModel.setOptions(
         listOf(
             ItemOption(
-                Icons.Default.Category, {
-                    navController.navigate(Routes.MainMenu) {
-                        launchSingleTop = true
-                    }
+                Icons.Default.Close, {
+                    mainViewModel.logout()
                 },
                 ""
-            ),
-            ItemOption(
-                Icons.Default.Category, {
-                    navController.navigate(Routes.MainMenu) {
-                        launchSingleTop = true
-                    }
-                },
-                "Eixir"
             )
         )
     )
@@ -74,11 +61,6 @@ fun Main() {
             navController = navController,
             startDestination = Routes.MainMenu
         ){
-            composable(Routes.LOGIN) {
-                LoginScreen(
-                    {}
-                )
-            }
             composable(Routes.MainMenu) {
                 SuccessScreen()
             }

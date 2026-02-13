@@ -5,6 +5,7 @@ import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.UserSessionManager
 import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.borrar.DeleteUserCommand
 import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.cambiarcontraseña.ChangePasswordCommand
 import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.login.LoginCommand
+import ies.sequeros.dam.pmdm.gestionperifl.aplicacion.register.RegisterCommand
 import ies.sequeros.dam.pmdm.gestionperifl.dominio.IUserRepository
 import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.TokenJwt
 import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.TokenStorage
@@ -16,6 +17,7 @@ import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.request
 import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.cio.Request
 import io.ktor.http.cio.Response
 import io.ktor.http.contentType
@@ -29,12 +31,20 @@ class UserRepository(private val url:String,private val _client: HttpClient): IU
                 setBody(loginCommand)
             }
 
-            if(request.status.value !in 200..<300)
-                throw Exception("${request.status.value}-${request.status.description}")
+            when(request.status){
+                HttpStatusCode.OK, HttpStatusCode.Created -> ""
+                HttpStatusCode.BadRequest -> throw Exception("Usuario o contraseña no validos")
+                HttpStatusCode.Conflict -> throw Exception("Usuario o contraseña incorrecto")
+                else -> throw Exception(request.status.description)
+            }
 
             val item = request.body<LoginDto>()
             item
         }
+    }
+
+    override suspend fun register(registerCommand: RegisterCommand): Result<Boolean> {
+        TODO("Not yet implemented")
     }
 
     override suspend fun delete(deleteUserCommand: DeleteUserCommand): Result<Boolean> {

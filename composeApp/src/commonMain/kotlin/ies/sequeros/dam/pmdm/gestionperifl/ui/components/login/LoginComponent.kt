@@ -44,7 +44,7 @@ fun LoginComponent (state: LoginState,
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Iniciar Sesión",
+                text = "Iniciar Sesións",
                 style = MaterialTheme.typography.displaySmall,
                 modifier = Modifier.padding(bottom = 32.dp)
             )

@@ -1,4 +1,4 @@
-package ies.sequeros.dam.pmdm.gestionperifl.application.register
+package ies.sequeros.dam.pmdm.gestionperifl.aplicacion.register
 
 import kotlinx.serialization.Serializable
 
