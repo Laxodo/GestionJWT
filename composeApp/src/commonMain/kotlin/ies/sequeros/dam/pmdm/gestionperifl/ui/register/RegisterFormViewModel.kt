@@ -25,6 +25,7 @@ class RegisterFormViewModel(
                     username = username,
                     usernameError = when {
                         username.isBlank() -> "El nombre no puede estar vacío"
+                        username.length < 8 -> "El nombre tiene que ser mayor de 8 caracteres, una mayuscula, una minuscula y caracter especial"
                         else -> null
                     }
                 )
