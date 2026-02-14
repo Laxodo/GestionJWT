@@ -1,4 +1,4 @@
-package ies.sequeros.dam.pmdm.gestionperifl.ui.components.login
+package ies.sequeros.dam.pmdm.gestionperifl.ui.components.updateUser
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -21,65 +20,52 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
+import ies.sequeros.com.dam.pmdm.administrador.ui.productos.form.ComboBox
 
 @Composable
-fun LoginComponent (state: LoginState,
-                    onEmailChange: (String) -> Unit,
-                    onPasswordChange: (String) -> Unit,
-                    onLoginClick: () -> Unit,
-                    onCancel: () -> Unit) {
+fun UpdateUserComponent(
+    state: UpdateUserState,
+    onUserUpdate: (String) -> Unit,
+    onStatusChange: (String) -> Unit,
+    onUpdateClick: () -> Unit,
+    onCancel: () -> Unit
+) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         Column(
-            modifier = Modifier
-                .padding(24.dp)
-                .widthIn(max = 400.dp)
-                .fillMaxWidth(),
+            modifier = Modifier.padding(24.dp).widthIn(max = 400.dp).fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Iniciar Sesións",
+                text = "Cambiar nombre de Usuario",
                 style = MaterialTheme.typography.displaySmall,
                 modifier = Modifier.padding(bottom = 32.dp)
             )
-
-            // Campo de Email
             OutlinedTextField(
-                value = state.email,
-                onValueChange = { onEmailChange(it) },
-                label = { Text("Email") },
+                value = state.newUsername,
+                onValueChange = { onUserUpdate(it) },
+                label = { Text("Nuevo nombre del usuario") },
                 modifier = Modifier.fillMaxWidth(),
-                isError = state.emailError != null,
-                supportingText = {
-                    state.emailError?.let { Text(it) }
-                },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+                isError = state.newUsernameError != null
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
-            // Campo de Contraseña
-            OutlinedTextField(
-                value = state.password,
-                onValueChange = { onPasswordChange(it) },
-                label = { Text("Contraseña") },
-                visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth(),
-                isError = state.passwordError != null,
-                supportingText = {
-                    state.passwordError?.let { Text(it) }
-                },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+            ComboBox(
+                items = listOf("pending", "active", "inactive", "suspended"),
+                label = "Estado de usuario",
+                current = state.newStatus,
+                itemLabel = { it },
+                onSelect = { onStatusChange(it) },
+                editable = true
             )
-            // Error General
+
             if (state.errorMessage != null) {
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
@@ -88,37 +74,39 @@ fun LoginComponent (state: LoginState,
                     style = MaterialTheme.typography.bodySmall
                 )
             }
-
             Spacer(modifier = Modifier.height(32.dp))
-
             if (state.isLoading) {
                 CircularProgressIndicator()
             } else {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp) // Espacio entre botones
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    // Botón de Cancelar (Secundario)
                     OutlinedButton(
                         onClick = onCancel,
                         modifier = Modifier.weight(1f),
                         shape = RoundedCornerShape(8.dp)
                     ) {
                         Text("Cancelar")
+                        rememberNavController().popBackStack()
                     }
-
-                    // Botón de Login (Primario)
                     Button(
                         onClick = {
-                            onLoginClick()
-                            //viewModel.login()
-
+                            onUpdateClick()
                         },
                         modifier = Modifier.weight(1f),
                         enabled = state.isValid && !state.isLoading,
                         shape = RoundedCornerShape(8.dp)
                     ) {
-                        Text("Entrar")
+                        Text("Aceptar")
+                    }
+                    if (state.errorMessage != null) {
+                        Text(
+                            text = state.errorMessage,
+                            color = MaterialTheme.colorScheme.error,
+                            style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier.padding(bottom = 8.dp).fillMaxWidth()
+                        )
                     }
                 }
             }

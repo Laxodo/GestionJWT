@@ -1,0 +1,227 @@
+package ies.sequeros.dam.pmdm.gestionperifl.ui
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Category
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Image
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Logout
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.PermanentDrawerSheet
+import androidx.compose.material3.PermanentNavigationDrawer
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.window.core.layout.WindowWidthSizeClass
+import ies.sequeros.dam.pmdm.gestionperifl.Routes
+import ies.sequeros.dam.pmdm.gestionperifl.ui.delete.Delete
+import ies.sequeros.dam.pmdm.gestionperifl.ui.delete.DeleteFormViewModel
+import ies.sequeros.dam.pmdm.gestionperifl.ui.gestion.actualizarPerfil.UpdateUserScreen
+import ies.sequeros.dam.pmdm.gestionperifl.ui.gestion.cambiarContraseña.changePasswordScreen
+import ies.sequeros.dam.pmdm.gestionperifl.ui.gestion.listarusuario.ListarUsuario
+import ies.sequeros.dam.pmdm.gestionperifl.ui.login.LoginScreen
+import org.koin.compose.viewmodel.koinViewModel
+
+@Composable
+fun Main() {
+
+    val mainViewModel: MainViewModel = koinViewModel()
+    val deleteFormViewModel: DeleteFormViewModel = koinViewModel()
+    val navController = rememberNavController()
+
+    val options by mainViewModel.options.collectAsState()
+    val window = currentWindowAdaptiveInfo()
+
+    mainViewModel.setOptions(
+        listOf(
+            ItemOption(
+                Icons.Default.List, {
+                    navController.navigate(Routes.LISTUSER){
+                        launchSingleTop = true
+                    }
+                },
+                "Ver Perfil"
+            ),
+            ItemOption(
+                Icons.Default.Lock, {
+                    navController.navigate(Routes.CHANGEPASSWORD){
+                        launchSingleTop = true
+                    }
+                },
+                "Cambiar contraseña"
+            ),
+            ItemOption(
+                Icons.Default.Edit, {
+                    navController.navigate(Routes.UPDATEUSER){
+                        launchSingleTop = true
+                    }
+                },
+                "Modificar perfil"
+            ),
+            ItemOption(
+                Icons.Default.Delete, {
+                    navController.navigate(Routes.DELETE){
+                        launchSingleTop = true
+                    }
+                },
+                ""
+            ),
+            ItemOption(
+                Icons.Default.Close, {
+                    mainViewModel.logout()
+                },
+                ""
+            )
+        )
+    )
+
+    val navegador: @Composable () -> Unit = {
+        NavHost(
+            navController = navController,
+            startDestination = Routes.MainMenu
+        ){
+            composable(Routes.MainMenu) {
+                SuccessScreen()
+            }
+
+            composable(Routes.DELETE){
+                Delete(
+                    deleteFormViewModel,
+                    {
+                        mainViewModel.logout()
+                    }
+                )
+            }
+
+            composable(Routes.UPDATEUSER) {
+                UpdateUserScreen(
+                    {
+
+                    },
+                    {
+                        navController.popBackStack()
+                    }
+                )
+            }
+
+            composable(Routes.CHANGEPASSWORD) {
+                changePasswordScreen(
+                    {
+
+                    },
+                    {
+                        navController.popBackStack()
+                    }
+                )
+            }
+
+            composable(Routes.LISTUSER) {
+                ListarUsuario()
+            }
+
+        }
+    }
+
+    if (window.windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.COMPACT) {
+        Scaffold(
+            bottomBar = {
+                NavigationBar {
+                    mainViewModel.options.collectAsState().value.forEach { item ->
+                        NavigationBarItem(
+                            selected = true,
+                            onClick = { item.action() },
+                            icon = { Icon(item.icon, contentDescription = item.name) },
+                        )
+                    }
+                }
+            }
+        ) { innerPadding ->
+            Box(Modifier.padding(innerPadding)) {
+                navegador()
+            }
+        }
+    } else {
+        PermanentNavigationDrawer(
+            drawerContent = {
+                PermanentDrawerSheet(
+                    Modifier.then(
+                        if (window.windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.COMPACT)
+                            Modifier.width(128.dp)
+                        else Modifier.width(128.dp)
+                    )
+                ) {
+                    Column(
+                        modifier = Modifier.fillMaxHeight()
+                            .padding(vertical = 16.dp),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Spacer(Modifier.height(16.dp))
+                        options.forEach { item ->
+                            NavigationDrawerItem(
+                                icon = {
+                                    Box(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        contentAlignment = Alignment.Center,
+
+                                        ) {
+                                        Icon(
+                                            item.icon,
+                                            tint = MaterialTheme.colorScheme.primary,
+                                            contentDescription = item.name
+                                        )
+                                    }
+                                },
+                                label = { window.windowSizeClass.toString() },
+                                selected = false,
+                                onClick = { item.action() },
+                                modifier = Modifier
+                                    .padding(vertical = 4.dp)
+
+                            )
+                        }
+                    }
+                }
+            },
+            content = {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
+                        .height(600.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    navegador()
+                }
+            }
+        )
+    }
+}

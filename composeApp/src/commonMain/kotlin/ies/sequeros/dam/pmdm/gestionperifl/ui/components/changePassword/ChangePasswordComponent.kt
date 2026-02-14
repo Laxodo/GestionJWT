@@ -1,4 +1,4 @@
-package ies.sequeros.dam.pmdm.gestionperifl.ui.components.login
+package ies.sequeros.dam.pmdm.gestionperifl.ui.components.changePassword
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,62 +24,57 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun LoginComponent (state: LoginState,
-                    onEmailChange: (String) -> Unit,
-                    onPasswordChange: (String) -> Unit,
-                    onLoginClick: () -> Unit,
-                    onCancel: () -> Unit) {
+fun ChangePasswordComponent(
+    state: ChangePasswordState,
+    onCurrentPasswordChange: (String) -> Unit,
+    onNewPasswordChange: (String) -> Unit,
+    onPasswordClick: () -> Unit,
+    onCancel: () -> Unit
+) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         Column(
-            modifier = Modifier
-                .padding(24.dp)
-                .widthIn(max = 400.dp)
-                .fillMaxWidth(),
+            modifier = Modifier.padding(24.dp).widthIn(max = 400.dp).fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Iniciar Sesións",
+                text = "Cambio de contraseña",
                 style = MaterialTheme.typography.displaySmall,
                 modifier = Modifier.padding(bottom = 32.dp)
             )
-
-            // Campo de Email
-            OutlinedTextField(
-                value = state.email,
-                onValueChange = { onEmailChange(it) },
-                label = { Text("Email") },
-                modifier = Modifier.fillMaxWidth(),
-                isError = state.emailError != null,
-                supportingText = {
-                    state.emailError?.let { Text(it) }
-                },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // Campo de Contraseña
             OutlinedTextField(
                 value = state.password,
-                onValueChange = { onPasswordChange(it) },
-                label = { Text("Contraseña") },
+                onValueChange = { onCurrentPasswordChange(it) },
+                label = { Text("Contraseña del usuario") },
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth(),
-                isError = state.passwordError != null,
                 supportingText = {
                     state.passwordError?.let { Text(it) }
                 },
                 singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                isError = state.passwordError != null
+                )
+            Spacer(modifier = Modifier.height(8.dp))
+            OutlinedTextField(
+                value = state.newPassword,
+                onValueChange = { onNewPasswordChange(it) },
+                label = { Text("Nueva contraseña del usuario") },
+                visualTransformation = PasswordVisualTransformation(),
+                modifier = Modifier.fillMaxWidth(),
+                supportingText = {
+                    state.newPasswordError?.let { Text(it) }
+                },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                isError = state.newPasswordError != null,
             )
-            // Error General
             if (state.errorMessage != null) {
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
@@ -88,17 +83,14 @@ fun LoginComponent (state: LoginState,
                     style = MaterialTheme.typography.bodySmall
                 )
             }
-
             Spacer(modifier = Modifier.height(32.dp))
-
             if (state.isLoading) {
                 CircularProgressIndicator()
             } else {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp) // Espacio entre botones
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    // Botón de Cancelar (Secundario)
                     OutlinedButton(
                         onClick = onCancel,
                         modifier = Modifier.weight(1f),
@@ -106,19 +98,23 @@ fun LoginComponent (state: LoginState,
                     ) {
                         Text("Cancelar")
                     }
-
-                    // Botón de Login (Primario)
                     Button(
                         onClick = {
-                            onLoginClick()
-                            //viewModel.login()
-
+                            onPasswordClick()
                         },
                         modifier = Modifier.weight(1f),
                         enabled = state.isValid && !state.isLoading,
                         shape = RoundedCornerShape(8.dp)
                     ) {
-                        Text("Entrar")
+                        Text("Aceptar")
+                    }
+                    if (state.errorMessage != null) {
+                        Text(
+                            text = state.errorMessage,
+                            color = MaterialTheme.colorScheme.error,
+                            style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier.padding(bottom = 8.dp).fillMaxWidth()
+                        )
                     }
                 }
             }

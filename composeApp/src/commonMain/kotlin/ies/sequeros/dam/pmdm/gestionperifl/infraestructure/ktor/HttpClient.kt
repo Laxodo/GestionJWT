@@ -1,9 +1,12 @@
 package ies.sequeros.dam.pmdm.gestionperifl.infraestructure.ktor
+import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.TokenStorage
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 
 import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.auth.Auth
+import io.ktor.client.plugins.auth.providers.BearerTokens
 
 import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -12,16 +15,18 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.header
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpStatusCode
 
 import io.ktor.http.encodedPath
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-fun createHttpClient(//tokenStorage: TokenStorage,
-                     refreshUrl:String): HttpClient {
+fun createHttpClient(tokenStorage: TokenStorage, refreshUrl:String): HttpClient {
     return HttpClient { // Puedes usar HttpClient(CIO), HttpClient(Darwin), etc.
         install(DefaultRequest) {
             header(HttpHeaders.ContentType, ContentType.Application.Json)
@@ -46,19 +51,52 @@ fun createHttpClient(//tokenStorage: TokenStorage,
         }
         install(Auth) {
             bearer {
-                sendWithoutRequest { request ->
-                    request.url.encodedPath.startsWith("/api/users/")
+                sendWithoutRequest {
+                    true
+                    /*request ->
+                    request.url.encodedPath.startsWith("/api/public/")*/
                 }
                 loadTokens {
-                    // Ktor llama a esto automáticamente en cada petición
-                    //obtener los tokens y si existen añadirlo
-                     //   BearerTokens(accessToken, refreshToken ?: "")
-                    null
+                    val accessToken = tokenStorage.getAccessToken()
+                    val refreshToken = tokenStorage.getRefreshToken()
+
+                    if (accessToken != null && refreshToken != null) {
+                        BearerTokens(accessToken, refreshToken)
+                    } else {
+                        null
+                    }
                 }
 
                 // configurar el refresco
                 refreshTokens {
-                   null
+                    // Enviamos la petición de refresco como un mapa (JSON)
+                    //end point de refresco
+                    println("DEBUG: ¡Iniciando proceso de refresco!")
+                    val response = client.post(refreshUrl) {
+                        markAsRefreshTokenRequest()
+                        //token de refresco
+                        setBody(mapOf("refresh_token" to tokenStorage.getRefreshToken()))
+                    }
+                    if (response.status == HttpStatusCode.OK) { // !=
+                    // Leemos la respuesta directamente como un Mapa
+                        val data = response.body<Map<String, String>>()
+                        // Extraer los valores usando las llaves del JSON
+                        val newAccess = data["access_token"]
+                        val newRefresh = data["refresh_token"] ?: tokenStorage.getRefreshToken()
+                        val idToken = data["id_token"] // Será null si es OAuth, tendrá valor si es Google actualizra el almacen de tokens
+                        // Opcional: Si existe id_token, aquí se podriña actualizar el perfilil
+                        if (idToken != null) {
+                            println("Se ha recibido identidad (OIDC): $idToken")
+                        }
+                        if (newAccess != null && newRefresh != null){
+                            tokenStorage.saveTokens(newAccess, newRefresh, idToken ?: "")
+                            BearerTokens(newAccess, newRefresh)
+                        }else{
+                            null
+                        }
+                    } else {
+                        null
+                    }
                 }
             }
         }
