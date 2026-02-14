@@ -23,11 +23,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
+import ies.sequeros.com.dam.pmdm.administrador.ui.productos.form.ComboBox
 
 @Composable
 fun UpdateUserComponent(
     state: UpdateUserState,
     onUserUpdate: (String) -> Unit,
+    onStatusChange: (String) -> Unit,
     onUpdateClick: () -> Unit,
     onCancel: () -> Unit
 ) {
@@ -48,11 +50,22 @@ fun UpdateUserComponent(
             OutlinedTextField(
                 value = state.newUsername,
                 onValueChange = { onUserUpdate(it) },
-                label = { Text("Contraseña del usuario") },
-                visualTransformation = PasswordVisualTransformation(),
+                label = { Text("Nuevo nombre del usuario") },
                 modifier = Modifier.fillMaxWidth(),
                 isError = state.newUsernameError != null
             )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            ComboBox(
+                items = listOf("pending", "active", "inactive", "suspended"),
+                label = "Estado de usuario",
+                current = state.newStatus,
+                itemLabel = { it },
+                onSelect = { onStatusChange(it) },
+                editable = true
+            )
+
             if (state.errorMessage != null) {
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(

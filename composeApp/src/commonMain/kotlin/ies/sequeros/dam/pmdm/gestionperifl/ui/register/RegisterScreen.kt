@@ -31,6 +31,7 @@ fun RegisterScreen(
         viewModel::onConfirmPassword,
         {
             viewModel.register()
+            onRegister()
         }, {
             onCancel()
         })

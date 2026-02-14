@@ -34,10 +34,22 @@ class UpdateUserFormViewModel(
         }
     }
 
+    fun onStatusChange(status: String) {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    newStatus = status,
+                )
+            }
+            validateForm()
+        }
+    }
+
     private fun validateForm() {
         val s = _state.value
         isFormValid.value =
             s.newUsername.isNotBlank() &&
+            s.newStatus.isNotBlank() &&
             s.newUsernameError == null
         _state.value=state.value.copy( isValid = isFormValid.value)
     }
@@ -49,7 +61,7 @@ class UpdateUserFormViewModel(
                 _state.value = state.value.copy(isLoading = true)
                 val updateUserCommand = UpdateUserCommand(
                     name = state.value.newUsername,
-                    estado = state.value.newStatus
+                    status = state.value.newStatus
                 )
                 val result = updateUserUseCase(updateUserCommand).onSuccess{
                     _state.update { it.copy(isLoading = false, isUpdateUserSuccess = true) }

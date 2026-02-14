@@ -24,6 +24,7 @@ fun UpdateUserScreen(
     UpdateUserComponent(
         state,
         viewModel::onUsernameChange,
+        viewModel::onStatusChange,
         {
             viewModel.updateUser()
         }, {

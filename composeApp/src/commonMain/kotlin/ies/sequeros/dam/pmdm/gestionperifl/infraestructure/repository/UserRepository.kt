@@ -69,7 +69,6 @@ class UserRepository(private val url:String,private val _client: HttpClient): IU
     }
 
     override suspend fun delete(deleteUserCommand: DeleteUserCommand): Result<Boolean> {
-        // TODO: Comporbar funcionamiento
         return runCatching {
             val request = this._client.delete("$url/api/users/me"){
                 contentType(ContentType.Application.Json)
@@ -97,7 +96,6 @@ class UserRepository(private val url:String,private val _client: HttpClient): IU
     }
 
     override suspend fun updateUser(updateUserCommand: UpdateUserCommand): Result<UpdateUserDto> {
-        //TODO: Creo que así esta bien
         return runCatching {
             val request = this._client.patch( "$url/api/users/me" ) {
                 contentType(ContentType.Application.Json)
